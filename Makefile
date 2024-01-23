@@ -14,10 +14,13 @@ LIB = ./libft/libft.a
 
 all : $(NAME)
 
-$(NAME) : $(OBJS) $(LIB)
-	$(CC) -g $^ -o $@
+$(NAME): $(OBJS) $(LIB)
+	@if [ -e $(NAME) ]; then \
+		echo "$(NAME) already exists. Skipping bulid"; \
+	else \
+		$(CC) $^ -o $@; \
+	fi
 -include $(DEPS)
-
 $(LIB) :
 	@$(MAKE) -C ./libft
 	@$(MAKE) bonus -C ./libft
