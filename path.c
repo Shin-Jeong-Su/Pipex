@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:25:46 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:11:15 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:14:20 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	get_opts(char *s, char ***tab)
 	return (1);
 }
 
-char	*get_path(char *cmd,char *envp[])
+char	*get_path(char *cmd, char *envp[])
 {
 	char	**envtab;
 	char	*path;
