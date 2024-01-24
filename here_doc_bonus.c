@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   here_doc_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/05 17:18:33 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:04:52 by jeshin           ###   ########.fr       */
+/*   Created: 2024/01/24 15:18:55 by jeshin            #+#    #+#             */
+/*   Updated: 2024/01/24 15:30:31 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex.h"
 
-size_t	ft_strlen(const char *s)
+int	is_here_d(char * limiter)
 {
-	size_t	i;
+	
+}
 
-	i = 0;
-	if (s == 0)
-		return (0);
-	while (*s)
-	{
-		s++;
-		i++;
-	}
-	return (i);
+int main(){
+
 }

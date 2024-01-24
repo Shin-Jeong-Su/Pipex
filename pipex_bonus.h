@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/13 15:41:22 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:21:28 by jeshin           ###   ########.fr       */
+/*   Created: 2024/01/24 15:21:15 by jeshin            #+#    #+#             */
+/*   Updated: 2024/01/24 18:12:20 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "./libft/libft.h"
+# include <sys/wait.h>
 
 typedef struct s_str_agr
 {
@@ -31,6 +32,15 @@ typedef struct s_str_agr
 	int		have_lst_made;
 	char	*tmp_s;
 }		t_str_agr;
+
+typedef struct s_ags
+{
+	char	*in_f;
+	char	*out_f;
+	int		n_cmd;
+	char	***opts_tab;
+	int		is_h_doc;
+}		t_ags;
 
 void	exit_with_errmsg(char *msg);
 void	free_tab(char	**tab);
