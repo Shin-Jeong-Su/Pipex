@@ -6,26 +6,26 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 16:08:39 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/23 18:00:03 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:12:28 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	my_execve(char **av, int nth)
+void	my_execve(char **av, int nth, char *envp[])
 {
 	char	*path;
 	char	**opts;
 
 	if (get_opts(av[nth], &opts) == 0)
 		exit_with_errmsg("opts error");
-	path = get_path(opts[0]);
+	path = get_path(opts[0],envp);
 	if (path == 0)
 		exit_with_errmsg("path error");
-	execve(path, opts, environ);
+	execve(path, opts, envp);
 }
 
-void	go_child(char **av, int *p_fd)
+void	go_child(char **av, int *p_fd, char *envp[])
 {
 	int		fd1;
 
@@ -43,10 +43,10 @@ void	go_child(char **av, int *p_fd)
 		exit(EXIT_FAILURE);
 	}
 	close(p_fd[0]);
-	my_execve(av, 2);
+	my_execve(av, 2, envp);
 }
 
-void	go_parent(char **av, int *p_fd)
+void	go_parent(char **av, int *p_fd, char *envp[])
 {
 	int		fd2;
 
@@ -67,10 +67,10 @@ void	go_parent(char **av, int *p_fd)
 		exit(EXIT_FAILURE);
 	}
 	close(p_fd[1]);
-	my_execve(av, 3);
+	my_execve(av, 3, envp);
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	int		p_fd[2];
 	pid_t	pid;
@@ -83,7 +83,7 @@ int	main(int argc, char *argv[])
 	if (pid == -1)
 		exit_with_errmsg("fork error");
 	if (pid == 0)
-		go_child(argv, p_fd);
+		go_child(argv, p_fd, envp);
 	else
-		go_parent(argv, p_fd);
+		go_parent(argv, p_fd, envp);
 }

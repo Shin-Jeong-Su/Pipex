@@ -6,13 +6,13 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:25:46 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/23 17:40:59 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:11:15 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**get_envtab(void)
+char	**get_envtab(char *envp[])
 {
 	int		i;
 	char	**tab;
@@ -20,11 +20,11 @@ char	**get_envtab(void)
 
 	i = -1;
 	tmp = 0;
-	while (environ[++i])
+	while (envp[++i])
 	{
-		if (ft_strnstr(environ[i], "PATH", 4))
+		if (ft_strnstr(envp[i], "PATH", 4))
 		{
-			tmp = ft_strnstr(environ[i], "PATH", 4) + 5;
+			tmp = ft_strnstr(envp[i], "PATH", 4) + 5;
 			tab = ft_split(tmp, ':');
 			i = -1;
 			while (tab[++i])
@@ -117,7 +117,7 @@ int	get_opts(char *s, char ***tab)
 	return (1);
 }
 
-char	*get_path(char *cmd)
+char	*get_path(char *cmd,char *envp[])
 {
 	char	**envtab;
 	char	*path;
@@ -125,7 +125,7 @@ char	*get_path(char *cmd)
 
 	if (cmd == 0)
 		return (0);
-	envtab = get_envtab();
+	envtab = get_envtab(envp);
 	i = -1;
 	while (envtab[++i])
 	{

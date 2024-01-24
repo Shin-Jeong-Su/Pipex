@@ -15,12 +15,9 @@ LIB = ./libft/libft.a
 all : $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
-	@if [ -e $(NAME) ]; then \
-		echo "$(NAME) already exists. Skipping bulid"; \
-	else \
-		$(CC) $^ -o $@; \
-	fi
+	$(CC) $^ -o $@; 
 -include $(DEPS)
+
 $(LIB) :
 	@$(MAKE) -C ./libft
 	@$(MAKE) bonus -C ./libft
@@ -32,10 +29,12 @@ clean :
 	@$(RM) $(OBJS) $(DEPS)
 	@$(MAKE) -C ./libft clean
 	@echo "cleaned"
+
 fclean : clean
 	@$(RM) $(NAME)
 	@$(MAKE) -C ./libft fclean
 	@echo "fcleaned"
+
 re : fclean all
 
 .PHONY = all clean fclean re
