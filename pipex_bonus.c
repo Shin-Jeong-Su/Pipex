@@ -6,11 +6,11 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:01:09 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 18:01:23 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 17:43:49 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	my_execve(char **av, int nth, char *envp[])
 {
@@ -25,65 +25,59 @@ void	my_execve(char **av, int nth, char *envp[])
 	execve(path, opts, envp);
 }
 
-void	go_child(char **av, int *p_fd, char *envp[])
-{
-	int		fd1;
-
-	fd1 = open(av[1], O_RDONLY);
-	if (fd1 < 0)
-		exit_with_errmsg("open error");
-	if (dup2(fd1, 0) < 0)
-	{
-		perror("dup2 of child error");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(p_fd[1], 1) < 0)
-	{
-		perror("dup2 of child error");
-		exit(EXIT_FAILURE);
-	}
-	close(p_fd[0]);
-	my_execve(av, 2, envp);
-}
-
 void	go_parent(char **av, int *p_fd, char *envp[])
 {
 	int		fd2;
 
-	fd2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
 	if (fd2 < 0)
-	{
-		perror("writing fd error");
 		exit(EXIT_FAILURE);
-	}
 	if (dup2(fd2, 1) < 0)
-	{
-		perror("dup2 error");
 		exit(EXIT_FAILURE);
-	}
 	if (dup2(p_fd[0], 0) < 0)
-	{
-		perror("dup2 error");
 		exit(EXIT_FAILURE);
-	}
 	close(p_fd[1]);
 	my_execve(av, 3, envp);
 }
 
-int	main(int argc, char *argv[], char *envp[])
+static void	my_dup2(int rd, int wr)
 {
-	int		p_fd[2];
-	pid_t	pid;
+	if (dup2(rd, 0) < 0)
+		perror("dup2 error");
+	if (dup2(wr, 1) < 0)
+		perror("dup2 error");
+}
 
-	if (argc != 5)
-		exit_with_errmsg("argc error");
-	if (pipe(p_fd) == -1)
-		exit_with_errmsg("pipe error");
-	pid = fork();
-	if (pid == -1)
-		exit_with_errmsg("fork error");
-	if (pid == 0)
-		go_child(argv, p_fd, envp);
-	else
-		go_parent(argv, p_fd, envp);
+void	close_all_pipe(t_ags *ags)
+{
+	int	i;
+
+	i = -1;
+	while (++i < ags->n_cmd -1)
+	{
+		close(ags->pipe_fd_tab[i][0]);
+		close(ags->pipe_fd_tab[i][1]);
+	}
+}
+
+void	go_child(t_ags ags, char **envp)
+{
+	pid_t	child_pid;
+	char	**opts;
+
+	child_pid = fork();
+	if (child_pid == 0)
+	{
+		if (ags.idx == 0)
+			my_dup2(ags.in_f_fd, ags.pipe_fd_tab[ags.idx][1]);
+		else if (ags.idx + 1 == ags.n_cmd)
+			my_dup2(ags.pipe_fd_tab[ags.idx - 1][0], ags.out_f_fd);
+		else
+			my_dup2(ags.pipe_fd_tab[ags.idx - 1][0] \
+			, ags.pipe_fd_tab[ags.idx][1]);
+		close_all_pipe(&ags);
+		opts = ags.opts_tab[ags.idx];
+		execve(get_path(opts[0], envp), opts, envp);
+		perror("execve error");
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 16:08:39 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:14:35 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 16:49:47 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,4 @@ void	go_parent(char **av, int *p_fd, char *envp[])
 	}
 	close(p_fd[1]);
 	my_execve(av, 3, envp);
-}
-
-int	main(int argc, char *argv[], char *envp[])
-{
-	int		p_fd[2];
-	pid_t	pid;
-
-	if (argc != 5)
-		exit_with_errmsg("argc error");
-	if (pipe(p_fd) == -1)
-		exit_with_errmsg("pipe error");
-	pid = fork();
-	if (pid == -1)
-		exit_with_errmsg("fork error");
-	if (pid == 0)
-		go_child(argv, p_fd, envp);
-	else
-		go_parent(argv, p_fd, envp);
 }

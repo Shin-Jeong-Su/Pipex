@@ -6,13 +6,13 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:25:46 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:41:56 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:29:51 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**get_envtab(char *envp[])
+static char	**get_envtab(char *envp[])
 {
 	int		i;
 	char	**tab;
@@ -39,20 +39,24 @@ char	**get_envtab(char *envp[])
 	return (0);
 }
 
-void	link_lst(t_list **lst, char *s, t_str_agr *ags)
+static int	link_lst(t_list **lst, char *s, t_str_ags *ags)
 {
 	t_list	*new;
 
-	if (!get_mid_substr(s, &(ags->tmp_s), ags->i, ags->pos))
-		exit_with_errmsg("substr error");
+	if (get_mid_substr(s, &(ags->tmp_s), ags->i, ags->pos) == -1)
+		return (-1);
 	if (ags->have_lst_made == FALSE)
 	{
 		*lst = ft_lstnew(((char *)ags->tmp_s));
+		if (lst == 0)
+			return (-1);
 		ags->have_lst_made = TRUE;
 	}
 	else
 	{
 		new = ft_lstnew((char *)ags->tmp_s);
+		if (new == 0)
+			return (-1);
 		ft_lstadd_back(lst, new);
 	}
 	if (s[ags->i] != 0)
@@ -61,11 +65,12 @@ void	link_lst(t_list **lst, char *s, t_str_agr *ags)
 			(ags->i)++;
 		ags->pos = ags->i;
 	}
+	return (0);
 }
 
-int	get_cmdlst(char *s, t_list **cmd_lst)
+static int	get_cmdlst(char *s, t_list **cmd_lst)
 {
-	t_str_agr	ags;
+	t_str_ags	ags;
 
 	init_str_agr(&ags);
 	while (s[ags.i])
@@ -74,20 +79,22 @@ int	get_cmdlst(char *s, t_list **cmd_lst)
 			ags.sq = !ags.sq;
 		else if (s[ags.i] == '"' && ags.sq == FALSE)
 			ags.dq = !ags.dq;
-		if (ags.sq == FALSE && ags.dq == FALSE && \
-		(s[ags.i] == ' ' || s[ags.i] == 0))
-			link_lst(cmd_lst, s, &ags);
+		if (ags.sq == FALSE \
+		&& ags.dq == FALSE \
+		&& (s[ags.i] == ' ' || s[ags.i] == 0))
+			if (link_lst(cmd_lst, s, &ags) == -1)
+				return (-1);
 		else
 			(ags.i)++;
 	}
 	if (ags.sq || ags.dq)
 	{
 		ft_lstclear(cmd_lst, free);
-		return (0);
+		return (-1);
 	}	
 	if (s[ags.i] == 0)
 		link_lst(cmd_lst, s, &ags);
-	return (1);
+	return (0);
 }
 
 int	get_opts(char *s, char ***tab)
@@ -97,7 +104,7 @@ int	get_opts(char *s, char ***tab)
 	int		size_lst;
 	int		i;
 
-	if (!get_cmdlst(s, &lst))
+	if (get_cmdlst(s, &lst) == -1)
 		exit_with_errmsg("cmd error\n");
 	head = lst;
 	size_lst = ft_lstsize(lst);
@@ -105,7 +112,7 @@ int	get_opts(char *s, char ***tab)
 	if (*tab == 0)
 	{
 		ft_lstclear(&lst, free);
-		return (0);
+		return (-1);
 	}
 	(*tab)[size_lst] = 0;
 	i = -1;
@@ -114,7 +121,7 @@ int	get_opts(char *s, char ***tab)
 		(*tab)[i] = (lst->content);
 		lst = lst->next;
 	}
-	return (1);
+	return (0);
 }
 
 char	*get_path(char *cmd, char *envp[])
@@ -126,6 +133,8 @@ char	*get_path(char *cmd, char *envp[])
 	if (cmd == 0)
 		return (0);
 	envtab = get_envtab(envp);
+	if (envtab == 0)
+		exit_with_errmsg("path error");
 	i = -1;
 	while (envtab[++i])
 	{

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:41:22 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:21:28 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 17:49:35 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <fcntl.h>
 # include "./libft/libft.h"
 
-typedef struct s_str_agr
+typedef struct s_str_ags
 {
 	int		dq;
 	int		sq;
@@ -30,11 +30,11 @@ typedef struct s_str_agr
 	int		pos;
 	int		have_lst_made;
 	char	*tmp_s;
-}		t_str_agr;
+}		t_str_ags;
 
 void	exit_with_errmsg(char *msg);
 void	free_tab(char	**tab);
-void	init_str_agr(t_str_agr *chunk);
+void	init_str_agr(t_str_ags *chunk);
 int		get_mid_substr(char *s, char **ret, int i, int pos);
 char	*get_path(char *cmd, char *envp[]);
 int		get_opts(char *s, char ***tab);

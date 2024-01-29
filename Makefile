@@ -10,6 +10,17 @@ SRCS_NAME = utils\
 SRCS = $(addsuffix .c,$(SRCS_NAME))
 DEPS = $(addsuffix .d,$(SRCS_NAME))
 OBJS = $(addsuffix .o,$(SRCS_NAME))
+
+BONUS = bonus
+SRCS_BONUS_NAME = utils\
+			 path\
+			 init\
+			 pipex\
+			 main
+SRCS_BONUS = $(addsuffix _bonus.c,$(SRCS_NAME))
+DEPS_BONUS = $(addsuffix _bonus.d,$(SRCS_NAME))
+OBJS_BONUS = $(addsuffix _bonus.o,$(SRCS_NAME))
+
 LIB = ./libft/libft.a
 
 all : $(NAME)
@@ -17,6 +28,10 @@ all : $(NAME)
 $(NAME): $(OBJS) $(LIB)
 	$(CC) $^ -o $@; 
 -include $(DEPS)
+
+$(BONUS) : $(OBJS_BONUS) $(LIB)
+	$(CC) $^ -o $@;
+-include $(DEPS_BONUS)
 
 $(LIB) :
 	@$(MAKE) -C ./libft
@@ -26,7 +41,7 @@ $(LIB) :
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 clean :
-	@$(RM) $(OBJS) $(DEPS)
+	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS)
 	@$(MAKE) -C ./libft clean
 	@echo "cleaned"
 

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/17 17:24:25 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 19:30:54 by jeshin           ###   ########.fr       */
+/*   Created: 2024/01/29 17:46:28 by jeshin            #+#    #+#             */
+/*   Updated: 2024/01/29 18:02:02 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	exit_with_errmsg(char *msg)
 {
@@ -18,7 +18,7 @@ void	exit_with_errmsg(char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	free_tab(char **tab)
+void	free_tab(char	**tab)
 {
 	int	i;
 
@@ -26,6 +26,22 @@ void	free_tab(char **tab)
 	while (tab[++i])
 		free(tab[i]);
 	free(tab);
+}
+
+void	free_all(t_ags	*ags)
+{
+	int	i;
+
+	i = -1;
+	while(++i < ags->n_cmd -1)
+		free(ags->pipe_fd_tab[i]);
+	free(ags->pipe_fd_tab);
+	i = -1;
+	while(++i<ags->n_cmd)
+		free_tab(ags->opts_tab[i]);
+	free(ags->opts_tab);
+	if (ags->is_here_doc)
+		unlink("tmp_f");
 }
 
 void	init_str_agr(t_str_ags *chunk)
@@ -47,6 +63,6 @@ int	get_mid_substr(char *s, char **ret, int i, int pos)
 	else
 		*ret = ft_substr(s, pos, i - pos);
 	if (*ret)
-		return (0);
-	return (-1);
+		return (1);
+	return (0);
 }
