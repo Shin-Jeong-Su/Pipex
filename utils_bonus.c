@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 17:46:28 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 19:47:24 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/30 18:58:11 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	free_all(t_ags	*ags)
 		free_tab(ags->opts_tab[i]);
 	free(ags->opts_tab);
 	if (ags->is_here_doc)
-		unlink("tmp_f");
+		unlink(".here_doc_tmp_f");
 }
 
 void	init_str_agr(t_str_ags *chunk)

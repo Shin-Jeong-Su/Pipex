@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:15:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/30 15:49:05 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/30 18:57:53 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	care_here_doc(char *limiter, t_ags *ags)
 	int		tmp_fd;
 
 	ags->is_here_doc = 1;
-	tmp_fd = open("tmp_f", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	tmp_fd = open(".here_doc_tmp_f", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (tmp_fd < 0)
 		return (-1);
 	size_lim = ft_strlen(limiter);
@@ -28,11 +28,12 @@ static int	care_here_doc(char *limiter, t_ags *ags)
 		buf = get_next_line(0);
 		if (ft_strncmp(buf, limiter, size_lim) == 0)
 			break ;
-		if (write(tmp_fd, buf, ft_strlen(buf)))
+		if (write(tmp_fd, buf, ft_strlen(buf)) < 0)
 			return (-1);
 	}
 	free(buf);
-	ags->in_f_fd = tmp_fd;
+	close((tmp_fd));
+	ags->in_f_fd = open(".here_doc_tmp_f",O_RDONLY);
 	return (0);
 }
 
