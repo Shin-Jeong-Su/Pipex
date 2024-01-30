@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:21:15 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 18:02:06 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:56:15 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	free_all(t_ags	*ags);
 void	init_str_agr(t_str_ags *chunk);
 int		get_mid_substr(char *s, char **ret, int i, int pos);
 int		init_ags(t_ags *ags, int ac, char **av);
-char	*get_path(char *cmd, char *envp[]);
 int		get_opts(char *s, char ***tab);
+char	*get_path(char *cmd, char *envp[]);
+void	my_execve(char **av, int nth, char *envp[]);
+void	close_all_pipe(t_ags *ags);
 void	go_child(t_ags ags, char **envp);
-void	my_pipe_close(t_ags *ags, int read_p1, int write_p2);
 #endif

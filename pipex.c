@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 16:08:39 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 16:49:47 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:45:48 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	my_execve(char **av, int nth, char *envp[])
 	char	*path;
 	char	**opts;
 
-	if (get_opts(av[nth], &opts) == 0)
+	if (get_opts(av[nth], &opts) == -1)
 		exit_with_errmsg("opts error");
 	path = get_path(opts[0], envp);
 	if (path == 0)

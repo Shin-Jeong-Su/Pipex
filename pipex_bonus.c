@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:01:09 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 17:43:49 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:55:27 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,12 @@ void	my_execve(char **av, int nth, char *envp[])
 	char	*path;
 	char	**opts;
 
-	if (get_opts(av[nth], &opts) == 0)
+	if (get_opts(av[nth], &opts) == -1)
 		exit_with_errmsg("opts error");
 	path = get_path(opts[0], envp);
 	if (path == 0)
 		exit_with_errmsg("path error");
 	execve(path, opts, envp);
-}
-
-void	go_parent(char **av, int *p_fd, char *envp[])
-{
-	int		fd2;
-
-	fd2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
-	if (fd2 < 0)
-		exit(EXIT_FAILURE);
-	if (dup2(fd2, 1) < 0)
-		exit(EXIT_FAILURE);
-	if (dup2(p_fd[0], 0) < 0)
-		exit(EXIT_FAILURE);
-	close(p_fd[1]);
-	my_execve(av, 3, envp);
 }
 
 static void	my_dup2(int rd, int wr)

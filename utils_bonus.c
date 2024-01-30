@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 17:46:28 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 18:02:02 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:47:24 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ void	free_all(t_ags	*ags)
 	int	i;
 
 	i = -1;
-	while(++i < ags->n_cmd -1)
+	while (++i < ags->n_cmd -1)
 		free(ags->pipe_fd_tab[i]);
 	free(ags->pipe_fd_tab);
 	i = -1;
-	while(++i<ags->n_cmd)
+	while (++i < ags->n_cmd)
 		free_tab(ags->opts_tab[i]);
 	free(ags->opts_tab);
 	if (ags->is_here_doc)

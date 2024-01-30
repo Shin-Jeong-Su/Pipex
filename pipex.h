@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:41:22 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 17:49:35 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:52:30 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,7 @@ void	init_str_agr(t_str_ags *chunk);
 int		get_mid_substr(char *s, char **ret, int i, int pos);
 char	*get_path(char *cmd, char *envp[]);
 int		get_opts(char *s, char ***tab);
+void	go_parent(char **av, int *p_fd, char *envp[]);
+void	go_child(char **av, int *p_fd, char *envp[]);
+void	my_execve(char **av, int nth, char *envp[]);
 #endif

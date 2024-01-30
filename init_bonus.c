@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:15:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 19:02:09 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/30 15:49:05 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static int	care_here_doc(char *limiter, t_ags *ags)
 	}
 	free(buf);
 	ags->in_f_fd = tmp_fd;
+	return (0);
 }
 
 static int	care_opts_tab(t_ags *ags, int ac, char **av)
@@ -80,8 +81,10 @@ int	init_ags(t_ags *ags, int ac, char **av)
 	if (ac < 5)
 		exit_with_errmsg("argc error");
 	if (ft_strncmp(av[1], "here_doc", 9) == 0)
-		if (care_here_doc(av[2], ags))
+	{
+		if (care_here_doc(av[2], ags) == -1)
 			exit_with_errmsg("here_doc error");
+	}
 	else
 	{
 		ags->is_here_doc = 0;

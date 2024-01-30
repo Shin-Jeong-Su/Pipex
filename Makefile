@@ -6,31 +6,34 @@ RM = rm -rf
 
 SRCS_NAME = utils\
 			 path\
-			 pipex
+			 pipex\
+			 main
 SRCS = $(addsuffix .c,$(SRCS_NAME))
 DEPS = $(addsuffix .d,$(SRCS_NAME))
 OBJS = $(addsuffix .o,$(SRCS_NAME))
 
-BONUS = bonus
 SRCS_BONUS_NAME = utils\
 			 path\
 			 init\
 			 pipex\
 			 main
-SRCS_BONUS = $(addsuffix _bonus.c,$(SRCS_NAME))
-DEPS_BONUS = $(addsuffix _bonus.d,$(SRCS_NAME))
-OBJS_BONUS = $(addsuffix _bonus.o,$(SRCS_NAME))
+SRCS_BONUS = $(addsuffix _bonus.c,$(SRCS_BONUS_NAME))
+DEPS_BONUS = $(addsuffix _bonus.d,$(SRCS_BONUS_NAME))
+OBJS_BONUS = $(addsuffix _bonus.o,$(SRCS_BONUS_NAME))
 
 LIB = ./libft/libft.a
 
 all : $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
-	$(CC) $^ -o $@; 
+	@$(CC) $^ -o $@
+	@echo "pipex made"
 -include $(DEPS)
 
-$(BONUS) : $(OBJS_BONUS) $(LIB)
-	$(CC) $^ -o $@;
+bonus : $(OBJS_BONUS) $(LIB)
+	@$(CC) $^ -o $(NAME)
+	@touch bonus_flg
+	@echo "pipex bonus made"
 -include $(DEPS_BONUS)
 
 $(LIB) :
@@ -41,7 +44,7 @@ $(LIB) :
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 clean :
-	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS)
+	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS) bonus_flg
 	@$(MAKE) -C ./libft clean
 	@echo "cleaned"
 

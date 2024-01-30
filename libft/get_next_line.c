@@ -6,13 +6,13 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:54:39 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 16:52:27 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/01/30 15:42:00 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*free_bkup(char **bkup)
+static void	*free_bkup(char **bkup)
 {
 	if (!bkup)
 		return (0);
@@ -21,38 +21,43 @@ void	*free_bkup(char **bkup)
 	return (0);
 }
 
-char	*_get_line(char **bkup)
+static char	*make_bkup(char **bkup, size_t bkup_size)
 {
+	size_t		i;
 	char		*ret;
 	char		*tmp;
-	size_t		i;
+
+	i = 0;
+	while ((*bkup)[i] && (*bkup)[i] != '\n')
+		i++;
+	ret = ft_substr(*bkup, 0, (i + 1));
+	if (!ret)
+		return ((char *)free_bkup(bkup));
+	if (bkup_size == i + 1)
+		tmp = 0;
+	else
+		tmp = ft_substr(*bkup, i + 1, bkup_size - (i + 1));
+	free(*bkup);
+	*bkup = tmp;
+	return (ret);
+}
+
+static char	*_get_line(char **bkup)
+{
+	char		*ret;
 	size_t		bkup_size;
 
 	bkup_size = ft_strlen(*bkup);
 	if (ft_strchr(*bkup, '\n'))
-	{
-		i = 0;
-		while ((*bkup)[i] && (*bkup)[i] != '\n')
-			i++;
-		ret = ft_substr(*bkup, 0, (i + 1));
-		if (!ret)
-			return ((char *)free_bkup(bkup));
-		if (bkup_size == i + 1)
-			tmp = 0;
-		else
-			tmp = ft_substr(*bkup, i + 1, bkup_size - (i + 1));
-		free(*bkup);
-		*bkup = tmp;
-		return (ret);
-	}
+		return (make_bkup(bkup, bkup_size));
 	if (!**bkup)
 		return ((char *)free_bkup(bkup));
-	ret = ft_substr(*bkup, 0, ft_strlen(*bkup));
+	ret = ft_substr(*bkup, 0, bkup_size);
 	free_bkup(bkup);
 	return (ret);
 }
 
-int	new_bkup(char **bkup, char *buf)
+static int	new_bkup(char **bkup, char *buf)
 {
 	char		*ret;
 
