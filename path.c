@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:25:46 by jeshin            #+#    #+#             */
-/*   Updated: 2024/02/01 14:48:18 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 21:01:40 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,11 @@ int	get_opts(char *s, char ***tab)
 	i = -1;
 	while (++i < size_lst)
 	{
-		(*tab)[i] = (lst->content);
+		(*tab)[i] = ft_strdup(lst->content);
 		lst = lst->next;
 	}
 	lst = head;
+	ft_lstclear(&lst, free);
 	return (0);
 }
 
