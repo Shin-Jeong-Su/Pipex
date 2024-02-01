@@ -6,11 +6,11 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 19:46:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 20:09:41 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 16:20:07 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 static char	**get_envtab(char *envp[])
 {
@@ -116,9 +116,11 @@ int	get_opts(char *s, char ***tab)
 	i = -1;
 	while (++i < size_lst)
 	{
-		(*tab)[i] = (lst->content);
+		(*tab)[i] = ft_strdup((lst->content));
 		lst = lst->next;
 	}
+		lst = head;
+	ft_lstclear(&lst, free);
 	return (0);
 }
 
@@ -132,19 +134,19 @@ char	*get_path(char *cmd, char *envp[])
 		return (0);
 	envtab = get_envtab(envp);
 	if (envtab == 0)
-		exit_with_errmsg("path error");
+		exit_with_errmsg("envtab error");
 	i = -1;
 	while (envtab[++i])
 	{
 		path = ft_strjoin(envtab[i], cmd);
 		if (access(path, F_OK | X_OK) == 0)
 		{
-			free_tab(envtab);
+			free_tab(&envtab);
 			return (path);
 		}
 		free(path);
 	}
-	free_tab(envtab);
+	free_tab(&envtab);
 	exit(127);
 	return (0);
 }

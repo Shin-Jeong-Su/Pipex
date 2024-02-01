@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:15:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/30 18:57:53 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:32:31 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ static int	care_here_doc(char *limiter, t_ags *ags)
 			break ;
 		if (write(tmp_fd, buf, ft_strlen(buf)) < 0)
 			return (-1);
+		free(buf);
 	}
 	free(buf);
 	close((tmp_fd));
-	ags->in_f_fd = open(".here_doc_tmp_f",O_RDONLY);
+	ags->in_f_fd = open(".here_doc_tmp_f", O_RDONLY);
 	return (0);
 }
 

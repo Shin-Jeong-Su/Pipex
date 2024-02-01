@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:41:22 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 19:52:30 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:35:18 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,17 @@ typedef struct s_str_ags
 	char	*tmp_s;
 }		t_str_ags;
 
+//utils.c
 void	exit_with_errmsg(char *msg);
 void	free_tab(char	**tab);
 void	init_str_agr(t_str_ags *chunk);
 int		get_mid_substr(char *s, char **ret, int i, int pos);
+
+//path.c
 char	*get_path(char *cmd, char *envp[]);
 int		get_opts(char *s, char ***tab);
+
+//pipex.c
 void	go_parent(char **av, int *p_fd, char *envp[]);
 void	go_child(char **av, int *p_fd, char *envp[]);
 void	my_execve(char **av, int nth, char *envp[]);

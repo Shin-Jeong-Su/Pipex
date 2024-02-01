@@ -1,7 +1,8 @@
 NAME = pipex
 CC = cc
-CFLAGS = -Werror -Wall -Wextra 
+CFLAGS = -Wall -Wextra -Werror
 DEPFLAGS = -MMD -MP
+DEBUGFALGS = -g -fsanitize=address
 RM = rm -rf
 
 SRCS_NAME = utils\
@@ -15,7 +16,7 @@ OBJS = $(addsuffix .o,$(SRCS_NAME))
 SRCS_BONUS_NAME = utils\
 			 path\
 			 init\
-			 pipex\
+			pipex\
 			 main
 SRCS_BONUS = $(addsuffix _bonus.c,$(SRCS_BONUS_NAME))
 DEPS_BONUS = $(addsuffix _bonus.d,$(SRCS_BONUS_NAME))
@@ -32,9 +33,9 @@ $(NAME): $(OBJS) $(LIB)
 
 bonus : $(OBJS_BONUS) $(LIB)
 	@$(CC) $^ -o $(NAME)
-	@touch bonus_flg
+	@touch bonus
 	@echo "pipex bonus made"
--include $(DEPS_BONUS)
+# -include $(DEPS_BONUS)
 
 $(LIB) :
 	@$(MAKE) -C ./libft
@@ -44,7 +45,7 @@ $(LIB) :
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 clean :
-	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS) bonus_flg
+	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS) bonus
 	@$(MAKE) -C ./libft clean
 	@echo "cleaned"
 

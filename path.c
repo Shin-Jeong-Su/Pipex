@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:25:46 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 20:08:56 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 14:48:18 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	get_opts(char *s, char ***tab)
 		(*tab)[i] = (lst->content);
 		lst = lst->next;
 	}
+	lst = head;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:21:15 by jeshin            #+#    #+#             */
-/*   Updated: 2024/01/29 19:56:15 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:35:07 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,21 @@ typedef struct s_ags
 	int		is_here_doc;
 }		t_ags;
 
+//utils_bonus.c
 void	exit_with_errmsg(char *msg);
-void	free_tab(char	**tab);
+void	free_tab(char	***tab);
 void	free_all(t_ags	*ags);
 void	init_str_agr(t_str_ags *chunk);
 int		get_mid_substr(char *s, char **ret, int i, int pos);
+
+//init_bonus.c
 int		init_ags(t_ags *ags, int ac, char **av);
+
+//path_bonus.c
 int		get_opts(char *s, char ***tab);
 char	*get_path(char *cmd, char *envp[]);
+
+//pipex_bonus.c
 void	my_execve(char **av, int nth, char *envp[]);
 void	close_all_pipe(t_ags *ags);
 void	go_child(t_ags ags, char **envp);
