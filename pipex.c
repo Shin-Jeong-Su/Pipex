@@ -6,66 +6,31 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 16:08:39 by jeshin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:31:29 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 20:43:33 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	my_execve(char **av, int nth, char *envp[])
+static void	my_dup2(int rd, int wr)
 {
-	char	*path;
+	if (dup2(rd, 0) < 0)
+		perror("dup2 error");
+	if (dup2(wr, 1) < 0)
+		perror("dup2 error");
+}
+
+void	go_child(t_ags *ags, char *envp[])
+{
 	char	**opts;
 
-	if (get_opts(av[nth], &opts) == -1)
-		exit_with_errmsg("opts error");
-	path = get_path(opts[0], envp);
-	if (path == 0)
-		exit_with_errmsg("path error");
-	execve(path, opts, envp);
-}
-
-void	go_child(char **av, int *p_fd, char *envp[])
-{
-	int		fd1;
-
-	fd1 = open(av[1], O_RDONLY);
-	if (fd1 < 0)
-		exit_with_errmsg("open error");
-	if (dup2(fd1, 0) < 0)
-	{
-		perror("dup2 of child error");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(p_fd[1], 1) < 0)
-	{
-		perror("dup2 of child error");
-		exit(EXIT_FAILURE);
-	}
-	close(p_fd[0]);
-	my_execve(av, 2, envp);
-}
-
-void	go_parent(char **av, int *p_fd, char *envp[])
-{
-	int		fd2;
-
-	fd2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd2 < 0)
-	{
-		perror("writing fd error");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(fd2, 1) < 0)
-	{
-		perror("dup2 error");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(p_fd[0], 0) < 0)
-	{
-		perror("dup2 error");
-		exit(EXIT_FAILURE);
-	}
-	close(p_fd[1]);
-	my_execve(av, 3, envp);
+	if (ags->idx == 0)
+		my_dup2(ags->in_f_fd, ags->pipe_fd[1]);
+	else if (ags->idx == 1)
+		my_dup2(ags->pipe_fd[0], ags->out_f_fd);
+	close(ags->pipe_fd[0]);
+	close(ags->pipe_fd[1]);
+	opts = ags->opts_tab[ags->idx];
+	execve(get_path(opts[0], envp), opts, envp);
+	perror("execve error");
 }

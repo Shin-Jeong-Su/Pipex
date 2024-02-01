@@ -6,13 +6,13 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:15:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:32:31 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 19:46:57 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static int	care_here_doc(char *limiter, t_ags *ags)
+static int	care_here_doc(int ac, char **av, t_ags *ags)
 {
 	int		size_lim;
 	char	*buf;
@@ -22,11 +22,11 @@ static int	care_here_doc(char *limiter, t_ags *ags)
 	tmp_fd = open(".here_doc_tmp_f", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (tmp_fd < 0)
 		return (-1);
-	size_lim = ft_strlen(limiter);
+	size_lim = ft_strlen(av[2]);
 	while (TRUE)
 	{
 		buf = get_next_line(0);
-		if (ft_strncmp(buf, limiter, size_lim) == 0)
+		if (ft_strncmp(buf, av[2], size_lim) == 0)
 			break ;
 		if (write(tmp_fd, buf, ft_strlen(buf)) < 0)
 			return (-1);
@@ -35,6 +35,9 @@ static int	care_here_doc(char *limiter, t_ags *ags)
 	free(buf);
 	close((tmp_fd));
 	ags->in_f_fd = open(".here_doc_tmp_f", O_RDONLY);
+	ags->out_f_fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (ags->out_f_fd < 0)
+		exit_with_errmsg("open outfile error");
 	return (0);
 }
 
@@ -84,7 +87,7 @@ int	init_ags(t_ags *ags, int ac, char **av)
 		exit_with_errmsg("argc error");
 	if (ft_strncmp(av[1], "here_doc", 9) == 0)
 	{
-		if (care_here_doc(av[2], ags) == -1)
+		if (care_here_doc(ac, av, ags) == -1)
 			exit_with_errmsg("here_doc error");
 	}
 	else
@@ -93,10 +96,10 @@ int	init_ags(t_ags *ags, int ac, char **av)
 		ags->in_f_fd = open(av[1], O_RDONLY);
 		if (ags->in_f_fd < 0)
 			exit_with_errmsg("open infile error");
+		ags->out_f_fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (ags->out_f_fd < 0)
+			exit_with_errmsg("open outfile error");
 	}
-	ags->out_f_fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (ags->out_f_fd < 0)
-		exit_with_errmsg("open outfile error");
 	ags->idx = -1;
 	if (care_opts_tab(ags, ac, av) == -1)
 		exit_with_errmsg("opts error");

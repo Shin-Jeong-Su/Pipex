@@ -2,12 +2,12 @@ NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 DEPFLAGS = -MMD -MP
-DEBUGFALGS = -g -fsanitize=address
 RM = rm -rf
 
 SRCS_NAME = utils\
 			 path\
 			 pipex\
+			 init\
 			 main
 SRCS = $(addsuffix .c,$(SRCS_NAME))
 DEPS = $(addsuffix .d,$(SRCS_NAME))
@@ -35,7 +35,7 @@ bonus : $(OBJS_BONUS) $(LIB)
 	@$(CC) $^ -o $(NAME)
 	@touch bonus
 	@echo "pipex bonus made"
-# -include $(DEPS_BONUS)
+-include $(DEPS_BONUS)
 
 $(LIB) :
 	@$(MAKE) -C ./libft

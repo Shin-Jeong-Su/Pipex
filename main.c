@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 19:49:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:31:07 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/02/01 20:49:43 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,24 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	int		p_fd[2];
-	pid_t	pid;
+	int		status;
+	t_ags	ags;
 
-	if (argc != 5)
-		exit_with_errmsg("argc error");
-	if (pipe(p_fd) == -1)
-		exit_with_errmsg("pipe error");
-	pid = fork();
-	if (pid == -1)
-		exit_with_errmsg("fork error");
-	if (pid == 0)
-		go_child(argv, p_fd, envp);
-	else
-		go_parent(argv, p_fd, envp);
+	init_ags(&ags, argc, argv);
+	while (++ags.idx < 2)
+	{
+		ags.child_pid[ags.idx] = fork();
+		if (ags.child_pid[ags.idx] == -1)
+			exit_with_errmsg("fork error");
+		if (ags.child_pid[ags.idx] == 0)
+			go_child(&ags, envp);
+	}
+	close(ags.pipe_fd[0]);
+	close(ags.pipe_fd[1]);
+	ags.idx = -1;
+	while (++ags.idx < 2)
+		waitpid(ags.child_pid[ags.idx], &status, 0);
+	close(ags.in_f_fd);
+	close(ags.out_f_fd);
+	return (0);
 }
