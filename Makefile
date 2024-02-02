@@ -24,17 +24,24 @@ OBJS_BONUS = $(addsuffix _bonus.o,$(SRCS_BONUS_NAME))
 
 LIB = ./libft/libft.a
 
-all : $(NAME)
+all : mandatory
 
-$(NAME): $(OBJS) $(LIB)
-	@$(CC) $^ -o $@
+mandatory : $(OBJS) $(LIB)
+	@$(CC) $^ -o $(NAME)
+	@touch mandatory
 	@echo "pipex made"
+	@if [ -e bonus ]; then \
+		rm bonus; \
+	fi
 -include $(DEPS)
 
 bonus : $(OBJS_BONUS) $(LIB)
 	@$(CC) $^ -o $(NAME)
 	@touch bonus
 	@echo "pipex bonus made"
+	@if [ -e mandatory ]; then \
+		rm mandatory; \
+	fi
 -include $(DEPS_BONUS)
 
 $(LIB) :
@@ -45,7 +52,7 @@ $(LIB) :
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 clean :
-	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS) bonus
+	@$(RM) $(OBJS) $(DEPS) $(OBJS_BONUS) $(DEPS_BONUS) bonus mandatory
 	@$(MAKE) -C ./libft clean
 	@echo "cleaned"
 
